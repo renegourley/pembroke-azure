@@ -1,0 +1,31 @@
+workspace "Pembroke" "The Pembroke:87 layout architecture" {
+
+    model {
+        pembroke = softwareSystem  "Pembroke" {
+            layoutBus = container  "Layout Bus" notification
+            group time {
+                timeTracker = container "Time Tracker" datastore
+                timeServer = container "Time Server" function {
+                    -> layoutBus send/receive
+                    -> timeTracker "persist state"
+                }
+            }
+            group dccSystem {
+                loco = container "Decoder" hardware
+                sprog = container "Sprog 3" hardware {
+                    -> loco drives
+                }
+                jmri = container "JMRI" java {
+                    -> sprog drives
+                }
+                container "DCC System" java {
+                    -> jmri starts
+                    -> layoutBus send
+                }
+            }
+            clock = container "Clock" desktopApp {
+                -> layoutBus receive
+            }
+        }
+    }
+}
