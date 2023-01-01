@@ -17,4 +17,4 @@ steps:
     scriptType: 'bash'
     scriptLocation: 'inlineScript'
     inlineScript: |
-      az deployment sub create --location WestUS --template-file resourceGroups.bicep --parameters @resourceGroups.parameters.json
+      az deployment sub create --location WestUS --template-file infrastructure/resourceGroups.bicep --parameters @infrastructure/resourceGroups.parameters.json
