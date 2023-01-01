@@ -10,10 +10,13 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    deploymentScope: 'Subscription'
+    azureResourceManagerConnection: 'Azure subscription 1(1)(4af6e34b-5e4f-4e0e-96a6-fe2f38fa2bb6)'
+    subscriptionId: '4af6e34b-5e4f-4e0e-96a6-fe2f38fa2bb6'
+    location: 'West US 2'
+    templateLocation: 'Linked artifact'
+    csmFileLink: './infrastructure/resourceGroups.bicep'
+    csmParametersFileLink: './infrastructure/resourceGroups.paramaters.json'
+    deploymentMode: 'Incremental'
