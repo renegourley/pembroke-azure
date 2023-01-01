@@ -18,6 +18,6 @@ steps:
     subscriptionId: '4af6e34b-5e4f-4e0e-96a6-fe2f38fa2bb6'
     location: 'West US 2'
     templateLocation: 'Linked artifact'
-    csmFileLink: './infrastructure/resourceGroups.bicep'
-    csmParametersFileLink: './infrastructure/resourceGroups.paramaters.json'
+    csmFile: './infrastructure/resourceGroups.bicep'
+    csmParametersFile: './infrastructure/resourceGroups.paramaters.json'
     deploymentMode: 'Incremental'
