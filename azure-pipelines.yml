@@ -1,4 +1,5 @@
 # Starter pipeline
+
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
@@ -10,14 +11,10 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- script: cat ./infrastructure/resourceGroups.bicep
-- task: AzureResourceManagerTemplateDeployment@3
+- task: AzureCLI@2
   inputs:
-    deploymentScope: 'Subscription'
-    azureResourceManagerConnection: 'Azure subscription 1(1)(4af6e34b-5e4f-4e0e-96a6-fe2f38fa2bb6)'
-    subscriptionId: '4af6e34b-5e4f-4e0e-96a6-fe2f38fa2bb6'
-    location: 'West US 2'
-    templateLocation: 'Linked artifact'
-    csmFile: './infrastructure/resourceGroups.bicep'
-    csmParametersFile: './infrastructure/resourceGroups.paramaters.json'
-    deploymentMode: 'Incremental'
+    azureSubscription: 'Azure subscription 1(2)(4af6e34b-5e4f-4e0e-96a6-fe2f38fa2bb6)'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      az deployment sub create --location WestUS --template-file resourceGroups.bicep --parameters @resourceGroups.parameters.json
