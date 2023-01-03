@@ -4,6 +4,10 @@
   "parameters": {
     "targetLocation": {
       "value": "westus2"
+    },
+    "environment": {
+      "value": "qa"
     }
+
   }
 }
