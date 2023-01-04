@@ -4,27 +4,20 @@ param environment string
 @description('The location for all the resources; use the short strings from https://azuretracks.com/2021/04/current-azure-region-names-reference/')
 param targetLocation string = resourceGroup().location
 
-var timeStorageName = '${environment}timestorage${uniqueString(resourceGroup().id)}'
+var timeStorageName = '${environment}timestorage'
 resource timeStorage 'Microsoft.Storage/storageAccounts@2022-05-01' = {
   name: timeStorageName
   location: targetLocation
   sku: {
     name: 'Standard_LRS'
   }
-  kind: 'BlobStorage'
-}
-
-resource hostingPlan 'Microsoft.Web/serverfarms@2021-03-01' = {
-  name: '${environment}timeHostingPlanName'
-  location: targetLocation
-  sku: {
-    name: 'Y1'
-    tier: 'Dynamic'
+  kind: 'StorageV2'
+  properties: {
+    accessTier: 'Hot'
   }
-  properties: {}
 }
 
-var functionAppName = '${environment}timefunc${uniqueString(resourceGroup().id)}'
+var functionAppName = '${environment}timefunction'
 resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   name: functionAppName
   location: targetLocation
@@ -33,7 +26,6 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
     type: 'SystemAssigned'
   }
   properties: {
-    serverFarmId: hostingPlan.id
     siteConfig: {
       appSettings: [
         {
@@ -50,15 +42,11 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
         }
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'
-          value: '~2'
+          value: '~4'
         }
         {
           name: 'WEBSITE_NODE_DEFAULT_VERSION'
           value: '~18'
-        }
-        {
-          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-          value: applicationInsights.properties.InstrumentationKey
         }
         {
           name: 'FUNCTIONS_WORKER_RUNTIME'
@@ -69,15 +57,5 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
       minTlsVersion: '1.2'
     }
     httpsOnly: true
-  }
-}
-
-resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
-  name: '${az.environment()}'
-  location: targetLocation
-  kind: 'web'
-  properties: {
-    Application_Type: 'web'
-    Request_Source: 'rest'
   }
 }
