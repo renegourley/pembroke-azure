@@ -24,7 +24,7 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2021-03-01' = {
   properties: {}
 }
 
-var functionAppName = '${environment}timeserver${uniqueString(resourceGroup().id)}'
+var functionAppName = '${environment}timefunc${uniqueString(resourceGroup().id)}'
 resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
   name: functionAppName
   location: targetLocation
